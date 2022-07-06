@@ -20,7 +20,9 @@ const App = () => {
     },
   ];
 
-  console.log("App renders");
+  const handleSearch = (event) => {
+    console.log(event.target.value);
+  };
 
   return (
     <div>
@@ -28,21 +30,21 @@ const App = () => {
 
       <Search />
 
-      <hr />
+      <hr onSearch={handleSearch} />
 
       <List list={stories} />
     </div>
   );
 };
 
-const Search = () => {
+const Search = (props) => {
   const [searchTerm, setSearchTerm] = useState("");
 
   const handleChange = (event) => {
     setSearchTerm(event.target.value);
-  };
 
-  console.log("Search renders");
+    props.onSearch(event);
+  };
 
   return (
     <div>
@@ -57,8 +59,6 @@ const Search = () => {
 };
 
 const List = (props) => {
-  console.log("List renders");
-
   return (
     <ul>
       {props.list.map((item) => (
@@ -69,8 +69,6 @@ const List = (props) => {
 };
 
 const Item = (props) => {
-  console.log("Item renders");
-
   return (
     <li>
       <span>
