@@ -26,6 +26,9 @@ function App() {
 
       <hr />
 
+      {/* Creating an instance of List component */}
+      <List />
+      {/* Creating another instance of List component */}
       <List />
     </div>
   );
