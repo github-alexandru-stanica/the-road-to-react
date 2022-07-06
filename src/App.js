@@ -28,9 +28,9 @@ const App = () => {
     <div>
       <h1>My Hacker Stories</h1>
 
-      <Search />
+      <Search onSearch={handleSearch} />
 
-      <hr onSearch={handleSearch} />
+      <hr />
 
       <List list={stories} />
     </div>
