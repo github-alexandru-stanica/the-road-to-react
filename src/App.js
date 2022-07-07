@@ -43,39 +43,32 @@ const App = () => {
   );
 };
 
-const Search = (props) => {
+const Search = ({ search, onSearch }) => {
   return (
     <div>
       <label htmlFor="search">Search: </label>
-      <input
-        id="search"
-        type="text"
-        value={props.search}
-        onChange={props.onSearch}
-      />
+      <input id="search" type="text" value={search} onChange={onSearch} />
     </div>
   );
 };
 
-const List = (props) => {
-  return (
-    <ul>
-      {props.list.map((item) => (
-        <Item key={item.objectID} item={item} />
-      ))}
-    </ul>
-  );
-};
+const List = ({ list }) => (
+  <ul>
+    {list.map((item) => (
+      <Item key={item.objectID} item={item} />
+    ))}
+  </ul>
+);
 
-const Item = (props) => {
+const Item = ({ title, url, author, num_comments, points }) => {
   return (
     <li>
       <span>
-        <a href={props.item.url}>{props.item.title}</a>
+        <a href={url}>{title}</a>
       </span>
-      <span>{props.item.author}</span>
-      <span>{props.item.num_comments}</span>
-      <span>{props.item.points}</span>
+      <span>{author}</span>
+      <span>{num_comments}</span>
+      <span>{points}</span>
     </li>
   );
 };
