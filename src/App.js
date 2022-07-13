@@ -1,6 +1,7 @@
 import { useState, useReducer, useCallback, useEffect, useRef } from "react";
 import axios from "axios";
 import styled from "styled-components";
+import { ReactComponent as Check } from "./check.svg";
 
 const StyledContainer = styled.div`
   height: 100vw;
@@ -50,6 +51,11 @@ const StyledButton = styled.button`
 
 const StyledButtonSmall = styled(StyledButton)`
   padding: 5px;
+
+  &:hover > svg {
+    fill: #fff;
+    stroke: #fff;
+  }
 `;
 
 const StyledButtonLarge = styled(StyledButton)`
@@ -256,7 +262,7 @@ const Item = ({ item, onRemoveItem }) => {
       <StyledColumn width="10%">{item.points}</StyledColumn>
       <StyledColumn width="10%">
         <StyledButtonSmall type="button" onClick={() => onRemoveItem(item)}>
-          Dismiss
+          <Check height="18px" width="18px" />
         </StyledButtonSmall>
       </StyledColumn>
     </StyledItem>
