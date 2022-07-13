@@ -1,10 +1,17 @@
-import { useState, useReducer, useCallback, useEffect, useRef } from "react";
+import React, {
+  useState,
+  useReducer,
+  useCallback,
+  useEffect,
+  useRef,
+  useMemo,
+} from "react";
 import axios from "axios";
 import styled from "styled-components";
 import { ReactComponent as Check } from "./check.svg";
 
 const StyledContainer = styled.div`
-  height: 100vw;
+  min-height: 100vh;
   padding: 20px;
   background: #83a4d4;
   background: linear-gradient(to left, #b6fbff, #83a4d4);
@@ -83,10 +90,17 @@ const StyledInput = styled.input`
 `;
 
 const useSemiPersistentState = (key, initialState) => {
+  const isMounted = useRef(false);
+
   const [value, setValue] = useState(localStorage.getItem(key) || initialState);
 
   useEffect(() => {
-    localStorage.setItem(key, value);
+    if (!isMounted.current) {
+      isMounted.current = true;
+    } else {
+      console.log("A");
+      localStorage.setItem(key, value);
+    }
   }, [value, key]);
 
   return [value, setValue];
@@ -127,6 +141,12 @@ const storiesReducer = (state, action) => {
 
 const API_ENDPOINT = "https://hn.algolia.com/api/v1/search?query=";
 
+const getSumComments = (stories) => {
+  console.log("Heavy computation");
+
+  return stories.data.reduce((result, value) => result + value.num_comments, 0);
+};
+
 const App = () => {
   const [searchTerm, setSearchTerm] = useSemiPersistentState("search", "React");
 
@@ -157,26 +177,32 @@ const App = () => {
     handleFetchStories();
   }, [handleFetchStories]);
 
-  const handleRemoveStory = (item) => {
+  const handleRemoveStory = useCallback((item) => {
     dispatchStories({
       type: "REMOVE_STORY",
       payload: item,
     });
-  };
+  }, []);
 
-  const handleSearchInput = (event) => {
+  const handleSearchInput = useCallback((event) => {
     setSearchTerm(event.target.value);
-  };
+  }, []);
 
-  const handleSearchSubmit = (event) => {
+  const handleSearchSubmit = useCallback((event) => {
     setUrl(`${API_ENDPOINT}${searchTerm}`);
 
     event.preventDefault();
-  };
+  }, []);
+
+  const sumComments = useMemo(() => getSumComments(stories), [stories]);
+
+  console.log("App: rendered");
 
   return (
     <StyledContainer>
-      <StyledHeadlinePrimary>My Hacker Stories</StyledHeadlinePrimary>
+      <StyledHeadlinePrimary>
+        My Hacker Stories with {sumComments} comments.
+      </StyledHeadlinePrimary>
 
       <SearchForm
         searchTerm={searchTerm}
@@ -195,21 +221,24 @@ const App = () => {
   );
 };
 
-const SearchForm = ({ searchTerm, onSearchInput, onSearchSubmit }) => (
-  <StyledSearchForm onSubmit={onSearchSubmit}>
-    <InputWithLabel
-      id="search"
-      value={searchTerm}
-      isFocused
-      onInputChange={onSearchInput}
-    >
-      <strong>Search:</strong>
-    </InputWithLabel>
+const SearchForm = React.memo(
+  ({ searchTerm, onSearchInput, onSearchSubmit }) =>
+    console.log("SearchForm: rendered") || (
+      <StyledSearchForm onSubmit={onSearchSubmit}>
+        <InputWithLabel
+          id="search"
+          value={searchTerm}
+          isFocused
+          onInputChange={onSearchInput}
+        >
+          <strong>Search:</strong>
+        </InputWithLabel>
 
-    <StyledButtonLarge type="submit" disabled={!searchTerm}>
-      Submit
-    </StyledButtonLarge>
-  </StyledSearchForm>
+        <StyledButtonLarge type="submit" disabled={!searchTerm}>
+          Submit
+        </StyledButtonLarge>
+      </StyledSearchForm>
+    )
 );
 
 const InputWithLabel = ({
@@ -243,15 +272,20 @@ const InputWithLabel = ({
   );
 };
 
-const List = ({ list, onRemoveItem }) => (
-  <ul>
-    {list.map((item) => (
-      <Item key={item.objectID} item={item} onRemoveItem={onRemoveItem} />
-    ))}
-  </ul>
+const List = React.memo(
+  ({ list, onRemoveItem }) =>
+    console.log("List: rendered") || (
+      <ul>
+        {list.map((item) => (
+          <Item key={item.objectID} item={item} onRemoveItem={onRemoveItem} />
+        ))}
+      </ul>
+    )
 );
 
-const Item = ({ item, onRemoveItem }) => {
+const Item = React.memo(({ item, onRemoveItem }) => {
+  console.log("Item: rendered");
+
   return (
     <StyledItem>
       <StyledColumn width="40%">
@@ -267,6 +301,6 @@ const Item = ({ item, onRemoveItem }) => {
       </StyledColumn>
     </StyledItem>
   );
-};
+});
 
 export default App;
