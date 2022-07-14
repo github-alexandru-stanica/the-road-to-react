@@ -1,0 +1,93 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`InputWithLabel renders snapshot 1`] = `
+<div>
+  <label
+    for="search"
+  />
+   
+  <input
+    id="search"
+    type="text"
+    value="React"
+  />
+</div>
+`;
+
+exports[`List renders snapshot 1`] = `
+<ul>
+  <li>
+    <span>
+      <a
+        href="https://reactjs.org/"
+      >
+        React
+      </a>
+    </span>
+    <span>
+      Jordan Walke
+    </span>
+    <span>
+      3
+    </span>
+    <span>
+      4
+    </span>
+    <span>
+      <button
+        type="button"
+      >
+        Dismiss
+      </button>
+    </span>
+  </li>
+  <li>
+    <span>
+      <a
+        href="https://redux.js.org/"
+      >
+        Redux
+      </a>
+    </span>
+    <span>
+      Dan Abramov, Andrew Clark
+    </span>
+    <span>
+      2
+    </span>
+    <span>
+      5
+    </span>
+    <span>
+      <button
+        type="button"
+      >
+        Dismiss
+      </button>
+    </span>
+  </li>
+</ul>
+`;
+
+exports[`SearchForm renders snapshot 1`] = `
+<form>
+  <label
+    for="search"
+  >
+    <strong>
+      Search:
+    </strong>
+  </label>
+   
+  <input
+    id="search"
+    type="text"
+    value="React"
+  />
+  <button
+    type="submit"
+  >
+    Submit
+  </button>
+</form>
+`;
