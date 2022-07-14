@@ -1,12 +1,9 @@
 import React from "react";
 import { render, screen, fireEvent, act } from "@testing-library/react";
-import App, {
-  storiesReducer,
-  Item,
-  List,
-  SearchForm,
-  InputWithLabel,
-} from "./App";
+import App, { storiesReducer } from "./App";
+import { List, Item } from "./List";
+import { SearchForm } from "./SearchForm";
+import { InputWithLabel } from "./InputWithLabel";
 import axios from "axios";
 
 jest.mock("axios");
