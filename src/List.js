@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { sortBy } from "lodash";
 import styles from "./List.module.css";
+import { ReactComponent as ArrowUp } from "./arrow-up-solid.svg";
+import { ReactComponent as ArrowDown } from "./arrow-down-solid.svg";
 
 const SORTS = {
   NONE: (list) => list,
@@ -11,14 +13,20 @@ const SORTS = {
 };
 
 const List = ({ list, onRemoveItem }) => {
-  const [sort, setSort] = useState("NONE");
+  const [sort, setSort] = useState({
+    sortKey: "NONE",
+    isReverse: false,
+  });
 
   const handleSort = (sortKey) => {
-    setSort(sortKey);
+    const isReverse = sort.sortKey === sortKey && !sort.isReverse;
+    setSort({ sortKey, isReverse });
   };
 
-  const sortFunction = SORTS[sort];
-  const sortedList = sortFunction(list);
+  const sortFunction = SORTS[sort.sortKey];
+  const sortedList = sort.isReverse
+    ? sortFunction(list).reverse()
+    : sortFunction(list);
 
   return (
     <div>
@@ -27,52 +35,92 @@ const List = ({ list, onRemoveItem }) => {
           <button
             type="button"
             className={
-              sort === "TITLE"
+              sort.sortKey === "TITLE"
                 ? `${styles.button} ${styles.active}`
                 : styles.button
             }
             onClick={() => handleSort("TITLE")}
           >
             Title
+            {sort.sortKey === "TITLE" && !sort.isReverse && (
+              <ArrowUp
+                style={{ width: "16px", height: "16px", fill: "#fff" }}
+              />
+            )}
+            {sort.sortKey === "TITLE" && sort.isReverse && (
+              <ArrowDown
+                style={{ width: "16px", height: "16px", fill: "#fff" }}
+              />
+            )}
           </button>
         </span>
         <span style={{ width: "30%" }}>
           <button
             type="button"
             className={
-              sort === "AUTHOR"
+              sort.sortKey === "AUTHOR"
                 ? `${styles.button} ${styles.active}`
                 : styles.button
             }
             onClick={() => handleSort("AUTHOR")}
           >
             Author
+            {sort.sortKey === "AUTHOR" && !sort.isReverse && (
+              <ArrowUp
+                style={{ width: "16px", height: "16px", fill: "#fff" }}
+              />
+            )}
+            {sort.sortKey === "AUTHOR" && sort.isReverse && (
+              <ArrowDown
+                style={{ width: "16px", height: "16px", fill: "#fff" }}
+              />
+            )}
           </button>
         </span>
         <span style={{ width: "10%" }}>
           <button
             type="button"
             className={
-              sort === "COMMENT"
+              sort.sortKey === "COMMENT"
                 ? `${styles.button} ${styles.active}`
                 : styles.button
             }
             onClick={() => handleSort("COMMENT")}
           >
             Comments
+            {sort.sortKey === "COMMENT" && !sort.isReverse && (
+              <ArrowUp
+                style={{ width: "16px", height: "16px", fill: "#fff" }}
+              />
+            )}
+            {sort.sortKey === "COMMENT" && sort.isReverse && (
+              <ArrowDown
+                style={{ width: "16px", height: "16px", fill: "#fff" }}
+              />
+            )}
           </button>
         </span>
         <span style={{ width: "10%" }}>
           <button
             type="button"
             className={
-              sort === "POINT"
+              sort.sortKey === "POINT"
                 ? `${styles.button} ${styles.active}`
                 : styles.button
             }
             onClick={() => handleSort("POINT")}
           >
             Points
+            {sort.sortKey === "POINT" && !sort.isReverse && (
+              <ArrowUp
+                style={{ width: "16px", height: "16px", fill: "#fff" }}
+              />
+            )}
+            {sort.sortKey === "POINT" && sort.isReverse && (
+              <ArrowDown
+                style={{ width: "16px", height: "16px", fill: "#fff" }}
+              />
+            )}
           </button>
         </span>
         <span style={{ width: "10%" }}>Actions</span>
